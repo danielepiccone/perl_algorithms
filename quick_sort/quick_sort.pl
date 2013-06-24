@@ -25,13 +25,14 @@ foreach (0 .. 1000){
 # Quick sort
 sub quickSort{
     # Termination
-    if (int(@_) < 1){
+    if (int(@_) < 2){
         return @_;
     }
 
     # Get random Pivot
-    my $pivot = $_[rand(int(@_))];
-
+    my $p = rand(int(@_));
+    my $pivot = $_[$p];
+    # say $pivot;
     my @a;
     my @b;
     my @c;
@@ -51,17 +52,21 @@ sub quickSort{
         }
     }
 
+
     # For each part do the same
-    @a = &quickSort(@a);
+    &quickSort(@a);
 
-    @b = &quickSort(@b);
+    &quickSort(@b);
 
-    # Until ordered
-    my @merged = (@a,@c,@b);
-    return @merged;
+    # Mutate array
+    my @result = (@a,@c,@b);
+    for (my $i = 0; $i < int(@_); $i++){
+        $_[$i] = $result[$i];
+    } 
+    return 1;
 }
 
-@dat = &quickSort(@dat);
+&quickSort(@dat);
 
 # Print
 foreach (@dat) {
@@ -69,7 +74,6 @@ foreach (@dat) {
 }
 
 &lap;
-
 
 
 ### Subs
