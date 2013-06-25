@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use warnings;
 use strict;
+use diagnostics;
 use Data::Dumper;
 use Time::HiRes qw/ time sleep /;
 use 5.010;
@@ -10,19 +11,18 @@ Implementation of the bubble sort algorithm in Perl
 
 =head1 AUTHOR
 mail@danielepiccone.com
-
 =cut
 
 my $t = time();
 
 # Test data
 my @dat = ();
-foreach (0 .. 1000){
+for (0 .. 1000){
     push @dat, rand(9999);
 }
 
 # Bubble sort
-sub bubbleSort{
+sub bubble_sort{
     my $swapping = 1;
     while ($swapping) {
         $swapping = 0;
@@ -35,11 +35,11 @@ sub bubbleSort{
     }
 }
 
-&bubbleSort(@dat);
+&bubble_sort(@dat);
 
 # Print
-foreach (@dat) {
-    say $_
+for (@dat) {
+    print $_ . "\n";
 }
 
 &lap;
@@ -48,6 +48,5 @@ foreach (@dat) {
 ### Subs
 
 sub lap{
-    say "--- Time:";
-    say time()-$t;
+    print "--- Time:" . (time()-$t) . "\n";
 }

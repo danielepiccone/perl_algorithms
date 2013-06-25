@@ -10,20 +10,18 @@ Implementation of the quick sort algorithm in Perl
 
 =head1 AUTHOR
 mail@danielepiccone.com
-
 =cut
 
 my $t = time();
 
 my @dat = ();
-
 # Test data
-foreach (0 .. 1000){
+for (0 .. 1000){
     push @dat, rand(9999);
 }
 
 # Quick sort
-sub quickSort{
+sub quick_sort{
     # Termination
     if (int(@_) < 2){
         return @_;
@@ -54,9 +52,9 @@ sub quickSort{
 
 
     # For each part do the same
-    &quickSort(@a);
+    &quick_sort(@a);
 
-    &quickSort(@b);
+    &quick_sort(@b);
 
     # Mutate array
     my @result = (@a,@c,@b);
@@ -66,18 +64,19 @@ sub quickSort{
     return 1;
 }
 
-&quickSort(@dat);
+&quick_sort(@dat);
+
 
 # Print
-foreach (@dat) {
-    say $_
+for (@dat) {
+    print $_ . "\n";
 }
 
 &lap;
 
 
 ### Subs
+
 sub lap{
-    say "--- Time:";
-    say time()-$t;
+    print "--- Time:" . (time()-$t) . "\n";
 }

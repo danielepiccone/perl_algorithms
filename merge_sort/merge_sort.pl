@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use warnings;
 use strict;
+use diagnostics;
 use Data::Dumper;
 use Time::HiRes qw/ time sleep /;
 use 5.010;
@@ -10,19 +11,18 @@ Implementation of the merge sort algorithm in Perl
 
 =head1 AUTHOR
 mail@danielepiccone.com
-
 =cut
 
 my $t = time();
 
 # Test data
 my @dat = ();
-foreach (0 .. 1000){
-push @dat, rand(9999);
+for (0 .. 1000){
+push(@dat, rand(9999));
 }
 
 # Merge sort
-sub mergeSort {
+sub merge_sort {
     my @x = @_;
     # Termination:
     # Return the array if length < 2
@@ -30,8 +30,8 @@ sub mergeSort {
     
     # Define half size
     my $m = int @_ / 2;
-    my @a = &mergeSort(@x[0 .. $m - 1]);
-    my @b = &mergeSort(@x[$m .. (int(@_)-1)] );
+    my @a = &merge_sort(@x[0 .. $m - 1]);
+    my @b = &merge_sort(@x[$m .. (int(@_)-1)] );
     for (@_) {
         if (!@a){
             $_ = shift @b;
@@ -47,18 +47,18 @@ sub mergeSort {
 }
 
 
-&mergeSort(@dat);
+&merge_sort(@dat);
 
 # Print
-foreach (@dat) {
-    say $_
+for (@dat) {
+    print $_ . "\n";
 }
 
 &lap;
 
 
 ### Subs
+
 sub lap{
-    say "--- Time:";
-    say time()-$t;
+    print "--- Time:" . (time()-$t) . "\n";
 }
