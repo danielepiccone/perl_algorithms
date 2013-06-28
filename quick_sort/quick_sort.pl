@@ -17,66 +17,66 @@ my $t = time();
 my @dat = ();
 # Test data
 for (0 .. 1000){
-    push @dat, rand(9999);
+	push @dat, rand(9999);
 }
 
 # Quick sort
 sub quick_sort{
-    # Termination
-    if (int(@_) < 2){
-        return @_;
-    }
+# Termination
+	if (@_ < 2){
+		return @_;
+	}
 
-    # Get random Pivot
-    my $p = rand(int(@_));
-    my $pivot = $_[$p];
-    # say $pivot;
-    my @a;
-    my @b;
-    my @c;
+# Get random Pivot
+	my $p = rand(scalar(@_));
+	my $pivot = $_[$p];
+# say $pivot;
+	my @a;
+	my @b;
+	my @c;
 
-    # Partition the Array in two parts, ordered
-    foreach (@_){
-        if ($_ < $pivot){
-            push(@a,$_);
-        }
+# Partition the Array in two parts, ordered
+	foreach (@_){
+		if ($_ < $pivot){
+			push(@a,$_);
+		}
 
-        if ($_ > $pivot){
-            push(@b,$_);
-        }
+		if ($_ > $pivot){
+			push(@b,$_);
+		}
 
-        if ($_ == $pivot){
-            push(@c,$_);
-        }
-    }
+		if ($_ == $pivot){
+			push(@c,$_);
+		}
+	}
 
 
-    # For each part do the same
-    &quick_sort(@a);
+# For each part do the same
+	quick_sort(@a);
 
-    &quick_sort(@b);
+	quick_sort(@b);
 
-    # Mutate array
-    my @result = (@a,@c,@b);
-    for (my $i = 0; $i < int(@_); $i++){
-        $_[$i] = $result[$i];
-    } 
-    return 1;
+# Mutate array
+	my @result = (@a,@c,@b);
+	for (my $i = 0; $i < @_; $i++){
+		$_[$i] = $result[$i];
+	} 
+	return 1;
 }
 
-&quick_sort(@dat);
+quick_sort(@dat);
 
 
 # Print
 for (@dat) {
-    print $_ . "\n";
+	print $_ . "\n";
 }
 
-&lap;
+lap();
 
 
 ### Subs
 
 sub lap{
-    print "--- Time:" . (time()-$t) . "\n";
+	print "--- Time:" . (time()-$t) . "\n";
 }
