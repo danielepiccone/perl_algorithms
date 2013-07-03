@@ -9,31 +9,39 @@ use 5.010.0;
 
 # Init
 my $t = time();
+my $pass = 0;
 my %clusters;
 
-# Test data
-my @dat = map int rand(9999) , (0 .. 100);
 
-# Define K centroids
-my $num = 5;
-my @centroids;
-for my $i (0 .. $num){
-    push @centroids, $dat[ int rand(@dat) ];   
+
+main();
+
+sub main{
+    
+    # Test data
+    my @dat = map int rand(9999) , (0 .. 100);
+
+    # Define K centroids
+    my $num = 5;
+    my @centroids;
+    for my $i (0 .. $num){
+        push @centroids, $dat[ int rand(@dat) ];   
+    }
+
+    
+    # Main routine
+        while (kmeans(centroids => \@centroids, data => \@dat )){
+        $pass++
+    }
+
+    # Dump
+    for my $j (0 .. $num){
+        printf "Centroid %d: %.2f \n", $j, $centroids[$j];
+        say "\tCluster: @{$clusters{$j}}"; 
+    } 
+
+    lap();
 }
-
-# Init
-my $pass = 0;
-while (kmeans()){
-    $pass++
-}
-
-#Dump
-for my $j (0 .. $num){
-    printf "Centroid %d: %.2f \n", $j, $centroids[$j];
-    say "\tCluster: @{$clusters{$j}}"; 
-} 
-
-lap();
 
 
 #
@@ -41,8 +49,16 @@ lap();
 #
 
 sub kmeans{
-    # Single Step
+    # Arguments
+    my %arg = @_;
 
+    my @centroids = @{$arg{centroids}};
+    my @dat = @{$arg{data}};
+    my $num = 5;
+
+    #print Dumper @{$arg{centroids}};
+    
+   
     # Flush clusters
     for my $i (0 .. $num){
         $clusters{$i} = [];
@@ -99,7 +115,7 @@ sub kmeans{
         return 0;
     }
 
-    return 1;
+    return kmeans(centroids => \@centroids, data => \@dat);
 }
 
 
