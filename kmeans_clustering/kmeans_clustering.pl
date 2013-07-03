@@ -6,24 +6,19 @@ use Data::Dumper;
 use Time::HiRes qw/ time sleep /;
 use 5.010.0;
 
+
 # Init
 my $t = time();
-my $val = 0;
-my $num = 5;
-my %clusters = ();
+my %clusters;
 
 # Test data
-my @dat = ();
-for (0 .. 100){
-    push @dat, int(rand(9999));
-}
-
-# print Dumper @dat;
+my @dat = map int rand(9999) , (0 .. 100);
 
 # Define K centroids
+my $num = 5;
 my @centroids;
 for my $i (0 .. $num){
-    push( @centroids,$dat[int(rand(@dat))] );   
+    push @centroids, $dat[ int rand(@dat) ];   
 }
 
 # Init
@@ -33,31 +28,30 @@ while (kmeans()){
 }
 
 #Dump
-    foreach my $j (0 .. $num){
-        print "Centroid $j: $centroids[$j] \n";
-        print "Cluster [ @{$clusters{$j}} ] \n";
-    } 
+for my $j (0 .. $num){
+    printf "Centroid %d: %.2f \n", $j, $centroids[$j];
+    say "\tCluster: @{$clusters{$j}}"; 
+} 
 
-
-print "Done in $pass passes.\n";
 lap();
 
+
 #
-# Main Routine
+# K-means Routine
 #
 
 sub kmeans{
-# Single Step
+    # Single Step
 
-# Flush clusters
+    # Flush clusters
     for my $i (0 .. $num){
         $clusters{$i} = [];
     }
 
-# Memorize last centroid values
+    # Memorize last centroid values
     my @centroids_old = @centroids;
 
-# Find distance beetween points and classificate them by clusters
+    # Find distance beetween points and classificate them by clusters
     foreach (@dat){
         my $pt = $_;
         my $min_distance = 9999999999;
@@ -80,7 +74,7 @@ sub kmeans{
 
 
 
-# Replace means with the mean of cluster k
+    # Replace means with the mean of cluster k
     for my $i (0 .. $num){
         my $mean =0;
         my $n = 0;
@@ -92,7 +86,7 @@ sub kmeans{
         $centroids[$i] = $mean;
     }
 
-# Check if difference is under threshold = 0.1
+    # Check if difference is under threshold = 0.1
     my $lastpass = 1;
     for my $i (0 .. $num){
         my $deviance = abs($centroids[$i] - $centroids_old[$i]);
@@ -105,20 +99,16 @@ sub kmeans{
         return 0;
     }
 
-# Dump
-#    foreach my $j (0 .. $num){
-#        print "---------- $centroids[$j] \n";
-#        print "@{$clusters{$j}} \n";
-#    } 
- 
     return 1;
 }
 
 
-
-### Subs
+#
+# Statistics Routine
+#
 
 sub lap{
+    say "Done in $pass passes.";
     print "--- Time:" . (time()-$t) . "\n";
 }
 
