@@ -30,7 +30,7 @@ sub main{
 
     
     # Main routine
-        while (kmeans(centroids => \@centroids, data => \@dat )){
+        while (!kmeans(centroids => \@centroids, data => \@dat )){
         $pass++
     }
 
@@ -112,7 +112,7 @@ sub kmeans{
     }
 
     if ($lastpass == 1){
-        return 0;
+        return 1;
     }
 
     return kmeans(centroids => \@centroids, data => \@dat);
