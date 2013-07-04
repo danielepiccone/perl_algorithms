@@ -9,10 +9,6 @@ use 5.010.0;
 
 # Init
 my $t = time();
-my $pass = 0;
-my %clusters;
-
-
 
 main();
 
@@ -30,10 +26,11 @@ sub main{
 
     
     # Main routine
-        while (!kmeans(centroids => \@centroids, data => \@dat )){
-        $pass++
-    }
-
+    my ($centroids_ref, $clusters_ref) = kmeans( \@centroids, \@dat);
+    # print Dumper $cen_ref;
+    @centroids = @{$centroids_ref};
+    my %clusters = %{$clusters_ref};
+    
     # Dump
     for my $j (0 .. $num){
         printf "Centroid %d: %.2f \n", $j, $centroids[$j];
@@ -50,16 +47,15 @@ sub main{
 
 sub kmeans{
     # Arguments
-    my %arg = @_;
-
-    my @centroids = @{$arg{centroids}};
-    my @dat = @{$arg{data}};
-    my $num = 5;
-
-    #print Dumper @{$arg{centroids}};
     
-   
+    my @centroids = @{$_[0]};
+    my @dat = @{$_[1]};
+
+    my $num = @centroids - 1;
+
+     
     # Flush clusters
+    my %clusters;
     for my $i (0 .. $num){
         $clusters{$i} = [];
     }
@@ -112,10 +108,10 @@ sub kmeans{
     }
 
     if ($lastpass == 1){
-        return 1;
+        return (\@centroids,\%clusters);
     }
 
-    return kmeans(centroids => \@centroids, data => \@dat);
+    return kmeans(\@centroids, \@dat);
 }
 
 
@@ -124,7 +120,6 @@ sub kmeans{
 #
 
 sub lap{
-    say "Done in $pass passes.";
     print "--- Time:" . (time()-$t) . "\n";
 }
 
